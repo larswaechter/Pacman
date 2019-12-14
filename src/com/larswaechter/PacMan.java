@@ -4,49 +4,12 @@ import processing.core.PGraphics;
 
 import java.awt.*;
 
-class PacMan {
-    private float x;
-    private float y;
-
-    private Block currentBlock;
-
+class PacMan extends PlayerAbs {
     int pointCounter = 0;
 
     PacMan(Block spawnBlock) {
-        this.setCurrentBlock(spawnBlock);
-        this.getCurrentBlock().removeItem();
-
-        Point blockCenter = this.getCurrentBlock().getCenter();
-        this.x = blockCenter.x;
-        this.y = blockCenter.y;
-    }
-
-    /**
-     * Draw map
-     * @param g Processing graphic
-     */
-    void draw(PGraphics g) {
-        float radius = 15;
-
-        int color = 0xFFFFFF00;
-        g.fill(color);
-        g.ellipse(this.x, this.y, radius * 2, radius * 2);
-    }
-
-    /**
-     * Get current block player is positioned on
-     * @return Block
-     */
-    Block getCurrentBlock() {
-        return currentBlock;
-    }
-
-    /**
-     * Set current block player is positioned on
-     * @param currentBlock Block
-     */
-    void setCurrentBlock(Block currentBlock) {
-        this.currentBlock = currentBlock;
+        super(spawnBlock);
+        this.color = 0xFFFFFF00;
     }
 
     /**

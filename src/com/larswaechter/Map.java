@@ -3,11 +3,15 @@ package com.larswaechter;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.data.JSONArray;
-import processing.data.JSONObject;
 
 import java.util.ArrayList;
 
 public class Map extends PApplet {
+    // Array of all JSON maps
+    static String[] maps = {
+            "res/map1.json"
+    };
+
     // JSON map
     private JSONArray json;
 
@@ -22,6 +26,7 @@ public class Map extends PApplet {
 
     /**
      * Get upper block from block
+     *
      * @param block Block to get upper block from
      * @return Upper block
      */
@@ -34,6 +39,7 @@ public class Map extends PApplet {
 
     /**
      * Get lower block from block
+     *
      * @param block BLock to get lower block from
      * @return Lower block
      */
@@ -45,6 +51,7 @@ public class Map extends PApplet {
 
     /**
      * Get left block from block
+     *
      * @param block Block to get left block from
      * @return Left block
      */
@@ -55,6 +62,7 @@ public class Map extends PApplet {
 
     /**
      * Get right block from block
+     *
      * @param block Block to get right block from
      * @return Right block
      */
@@ -65,6 +73,7 @@ public class Map extends PApplet {
 
     /**
      * Draw map
+     *
      * @param g Processing graphic
      */
     void draw(PGraphics g) {
@@ -80,6 +89,7 @@ public class Map extends PApplet {
 
     /**
      * Get random block from map
+     *
      * @return Block
      */
     Block getRandomBlock() {
@@ -116,8 +126,6 @@ public class Map extends PApplet {
                     Map.blocksMap.add(null);
                 }
             }
-
-            System.out.println("");
         }
     }
 }
