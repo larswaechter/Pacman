@@ -31,8 +31,8 @@ public class Map extends PApplet {
      * @return Upper block
      */
     static Block getBlockAbove(Block block) {
-        Block[] colCurrent = Map.blocks[block.mapPosX];
-        Block blockAbove = colCurrent[Math.max(block.mapPosY - 1, 0)];
+        Block[] colCurrent = Map.blocks[block.mapIdxX];
+        Block blockAbove = colCurrent[Math.max(block.mapIdxY - 1, 0)];
         return blockAbove != null ? blockAbove : block;
 
     }
@@ -44,8 +44,8 @@ public class Map extends PApplet {
      * @return Lower block
      */
     static Block getBlockDown(Block block) {
-        Block[] colCurrent = Map.blocks[block.mapPosX];
-        Block blockDown = colCurrent[Math.min(block.mapPosY + 1, colCurrent.length - 1)];
+        Block[] colCurrent = Map.blocks[block.mapIdxX];
+        Block blockDown = colCurrent[Math.min(block.mapIdxY + 1, colCurrent.length - 1)];
         return blockDown != null ? blockDown : block;
     }
 
@@ -56,8 +56,8 @@ public class Map extends PApplet {
      * @return Left block
      */
     static Block getBlockLeft(Block block) {
-        Block[] colLeft = Map.blocks[Math.max(block.mapPosX - 1, 0)];
-        return colLeft[block.mapPosY] != null ? colLeft[block.mapPosY] : block;
+        Block[] colLeft = Map.blocks[Math.max(block.mapIdxX - 1, 0)];
+        return colLeft[block.mapIdxY] != null ? colLeft[block.mapIdxY] : block;
     }
 
     /**
@@ -67,8 +67,8 @@ public class Map extends PApplet {
      * @return Right block
      */
     static Block getBlockRight(Block block) {
-        Block[] colRight = Map.blocks[Math.min(block.mapPosX + 1, Map.blocks.length - 1)];
-        return colRight[block.mapPosY] != null ? colRight[block.mapPosY] : block;
+        Block[] colRight = Map.blocks[Math.min(block.mapIdxX + 1, Map.blocks.length - 1)];
+        return colRight[block.mapIdxY] != null ? colRight[block.mapIdxY] : block;
     }
 
     /**

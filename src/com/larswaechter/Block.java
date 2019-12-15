@@ -8,19 +8,20 @@ class Block {
     static final int width = 40;
     static final int height = 40;
 
-    int mapPosX;
-    int mapPosY;
+    // Positions in array map [x][y]
+    int mapIdxX;
+    int mapIdxY;
 
     private float x;
     private float y;
 
     private Item item;
 
-    Block(float x, float y, int mapPosX, int mapPosY) {
+    Block(float x, float y, int mapIdxX, int mapIdxY) {
         this.x = x;
         this.y = y;
-        this.mapPosX = mapPosX;
-        this.mapPosY = mapPosY;
+        this.mapIdxX = mapIdxX;
+        this.mapIdxY = mapIdxY;
         this.placeItem();
     }
 
