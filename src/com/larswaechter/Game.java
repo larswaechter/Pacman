@@ -28,7 +28,7 @@ public class Game extends PApplet {
     @Override
     public void setup() {
         background(0);
-        frameRate(15);
+        frameRate(20);
 
         this.menu = new Menu(this.loadPacManShape());
 
@@ -37,7 +37,8 @@ public class Game extends PApplet {
 
         // Create player
         this.pacMan = new PacMan(this.map.getRandomBlock());
-        this.ghost1 = new Ghost(this.map.getRandomBlock());
+        this.ghost1 = new Ghost();
+        this.ghost1.spawn(this.pacMan.getCurrentBlock());
     }
 
     @Override
@@ -56,7 +57,13 @@ public class Game extends PApplet {
         } else if (this.isRunning) {
             this.loop();
             this.map.draw(this.g);
+
+            this.pacMan.frameCounter++;
+            this.ghost1.frameCounter++;
+
             this.pacMan.draw(this.g);
+
+            this.ghost1.moveToPacMan(this.pacMan.currentBlock);
             this.ghost1.draw(this.g);
 
             this.fill(0xFFFFFFFF);
@@ -73,7 +80,7 @@ public class Game extends PApplet {
 
             // Game Over
         } else {
-            this.menu.drawGameOver(this.g);
+            this.menu.drawGameOver(this.g, this.pacMan.pointCounter);
             this.noLoop();
         }
     }
@@ -93,6 +100,6 @@ public class Game extends PApplet {
      * @return JSON map
      */
     private JSONArray loadRandomMap() {
-        return this.loadJSONArray(Map.maps[(int) random(0, Map.maps.length)]);
+        return this.loadJSONArray(Map.maps[(int) Utility.getRandomNumber(0, Map.maps.length)]);
     }
 }

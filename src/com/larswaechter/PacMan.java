@@ -14,30 +14,32 @@ class PacMan extends PlayerAbs {
      * @param direction Direction to move to
      */
     void move(int direction) {
-        switch (direction) {
-            // UP
-            case 38:
-                this.moveUp();
-                this.movePostHandler();
-                break;
+        if (this.frameCounter % this.speed == 0) {
+            switch (direction) {
+                // UP
+                case 38:
+                    this.moveUp();
+                    this.movePostHandler();
+                    break;
 
-            // DOWN
-            case 40:
-                this.moveDown();
-                this.movePostHandler();
-                break;
+                // DOWN
+                case 40:
+                    this.moveDown();
+                    this.movePostHandler();
+                    break;
 
-            // LEFT
-            case 37:
-                this.moveLeft();
-                this.movePostHandler();
-                break;
+                // LEFT
+                case 37:
+                    this.moveLeft();
+                    this.movePostHandler();
+                    break;
 
-            // RIGHT
-            case 39:
-                this.moveRight();
-                this.movePostHandler();
-                break;
+                // RIGHT
+                case 39:
+                    this.moveRight();
+                    this.movePostHandler();
+                    break;
+            }
         }
     }
 
@@ -55,31 +57,27 @@ class PacMan extends PlayerAbs {
      * Move player 1 block up
      */
     private void moveUp() {
-        this.setCurrentBlock(Map.getBlockAbove(this.currentBlock));
-        this.y = getCurrentBlock().getCenter().y;
+        this.moveToBlock(Map.getBlockTop(this.currentBlock));
     }
 
     /**
      * Move player 1 block down
      */
     private void moveDown() {
-        this.setCurrentBlock(Map.getBlockDown(this.currentBlock));
-        this.y = this.getCurrentBlock().getCenter().y;
+        this.moveToBlock(Map.getBlockDown(this.currentBlock));
     }
 
     /**
      * Move player 1 block left
      */
     private void moveLeft() {
-        this.setCurrentBlock(Map.getBlockLeft(this.currentBlock));
-        this.x = this.getCurrentBlock().getCenter().x;
+        this.moveToBlock(Map.getBlockLeft(this.currentBlock));
     }
 
     /**
      * Move player 1 block right
      */
     private void moveRight() {
-        this.setCurrentBlock(Map.getBlockRight(this.currentBlock));
-        this.x = this.getCurrentBlock().getCenter().x;
+        this.moveToBlock(Map.getBlockRight(this.currentBlock));
     }
 }

@@ -1,6 +1,6 @@
 package com.larswaechter;
 
-class ItemAbs {
+abstract class ItemAbs {
     float x;
     float y;
 

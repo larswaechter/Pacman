@@ -30,6 +30,17 @@ class Block {
     }
 
     /**
+     * Get distance between two blocks with Manhattan-Metric
+     *
+     * @param a Block a
+     * @param b Block b
+     * @return Distance between two blocks
+     */
+    static int getBlockDistance(Block a, Block b) {
+        return Math.abs(a.mapIdxX - b.mapIdxX) + Math.abs(a.mapIdxY - b.mapIdxY);
+    }
+
+    /**
      * Place new item on block
      */
     void placeItem() {
@@ -55,13 +66,14 @@ class Block {
 
     /**
      * Draw map
+     *
      * @param g Processing graphic
      */
     void draw(PGraphics g) {
         int color = 0xFFFFFFFF;
         g.fill(color);
         g.rect(this.x, this.y, Block.width, Block.height);
-        if(this.item != null) {
+        if (this.item != null) {
             this.item.draw(g);
         }
     }
