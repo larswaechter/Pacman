@@ -1,21 +1,22 @@
-package com.larswaechter;
+package com.larswaechter.map;
+
+import com.larswaechter.items.AbstractItem;
+import com.larswaechter.items.Point;
 
 import processing.core.PGraphics;
 
-import java.awt.*;
-
-class Block {
+public class Block {
     static final int width = 40;
     static final int height = 40;
 
     // Positions in array map [x][y]
-    int mapIdxX;
-    int mapIdxY;
+    private int mapIdxX;
+    private int mapIdxY;
 
     private float x;
     private float y;
 
-    private Item item;
+    private AbstractItem item;
 
     Block(float x, float y, int mapIdxX, int mapIdxY) {
         this.x = x;
@@ -25,7 +26,15 @@ class Block {
         this.placeItem();
     }
 
-    Item getItem() {
+    int getMapIdxX() {
+        return mapIdxX;
+    }
+
+    int getMapIdxY() {
+        return mapIdxY;
+    }
+
+    AbstractItem getItem() {
         return this.item;
     }
 
@@ -36,22 +45,22 @@ class Block {
      * @param b Block b
      * @return Distance between two blocks
      */
-    static int getBlockDistance(Block a, Block b) {
+    public static int getBlockDistance(Block a, Block b) {
         return Math.abs(a.mapIdxX - b.mapIdxX) + Math.abs(a.mapIdxY - b.mapIdxY);
     }
 
     /**
      * Place new item on block
      */
-    void placeItem() {
+    private void placeItem() {
         Point center = this.getCenter();
-        this.item = new Item((float) center.x, (float) center.y);
+        this.item = new Point((float) center.getX(), (float) center.getY());
     }
 
     /**
      * Remove item from block
      */
-    void removeItem() {
+    public void removeItem() {
         this.item = null;
     }
 
@@ -60,7 +69,7 @@ class Block {
      *
      * @return If block has an item
      */
-    boolean hasItem() {
+    public boolean hasItem() {
         return this.item != null;
     }
 
@@ -83,7 +92,7 @@ class Block {
      *
      * @return Center Point
      */
-    Point getCenter() {
+    public Point getCenter() {
         int xCenter = (int) (this.x + (Block.width / 2));
         int yCenter = (int) (this.y + (Block.height / 2));
 

@@ -1,20 +1,26 @@
-package com.larswaechter;
+package com.larswaechter.players;
 
-class PacMan extends PlayerAbs {
-    int pointCounter = 0;
+import com.larswaechter.map.*;
 
-    PacMan(Block spawnBlock) {
+public class PacMan extends AbstractPlayer {
+    private int pointCounter = 0;
+
+    public PacMan(Block spawnBlock) {
         super(spawnBlock);
-        this.color = 0xFFFFFF00;
+        this.setColor(0xFFFFFF00);
+    }
+
+    public int getPointCounter() {
+        return pointCounter;
     }
 
     /**
-     * Move player 1 block into given direction
+     * Move PacMan 1 block to given direction
      *
      * @param direction Direction to move to
      */
-    void move(int direction) {
-        if (this.frameCounter % this.speed == 0) {
+    public void move(int direction) {
+        if (this.frameCounter % this.getSpeed() == 0) {
             switch (direction) {
                 // UP
                 case 38:
@@ -54,30 +60,30 @@ class PacMan extends PlayerAbs {
     }
 
     /**
-     * Move player 1 block up
+     * Move PacMan 1 block up
      */
     private void moveUp() {
-        this.moveToBlock(Map.getBlockTop(this.currentBlock));
+        this.moveToBlock(Map.getBlockTop(this.getCurrentBlock()));
     }
 
     /**
-     * Move player 1 block down
+     * Move PacMan 1 block down
      */
     private void moveDown() {
-        this.moveToBlock(Map.getBlockDown(this.currentBlock));
+        this.moveToBlock(Map.getBlockDown(this.getCurrentBlock()));
     }
 
     /**
-     * Move player 1 block left
+     * Move PacMan 1 block left
      */
     private void moveLeft() {
-        this.moveToBlock(Map.getBlockLeft(this.currentBlock));
+        this.moveToBlock(Map.getBlockLeft(this.getCurrentBlock()));
     }
 
     /**
-     * Move player 1 block right
+     * Move PacMan 1 block right
      */
     private void moveRight() {
-        this.moveToBlock(Map.getBlockRight(this.currentBlock));
+        this.moveToBlock(Map.getBlockRight(this.getCurrentBlock()));
     }
 }

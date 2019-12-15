@@ -1,5 +1,8 @@
 package com.larswaechter;
 
+import com.larswaechter.map.Map;
+import com.larswaechter.players.*;
+
 import processing.core.PApplet;
 import processing.core.PShape;
 import processing.data.JSONArray;
@@ -11,7 +14,7 @@ public class Game extends PApplet {
     private Menu menu;
     private Map map;
     private PacMan pacMan;
-    private Ghost ghost1;
+    private Blinky blinky;
 
     private boolean showMenu = true;
     private boolean isRunning = false;
@@ -36,9 +39,9 @@ public class Game extends PApplet {
         this.map = new Map(this.loadRandomMap());
 
         // Create player
-        this.pacMan = new PacMan(this.map.getRandomBlock());
-        this.ghost1 = new Ghost();
-        this.ghost1.spawn(this.pacMan.getCurrentBlock());
+        this.pacMan = new PacMan(Map.getRandomBlock());
+        this.blinky = new Blinky();
+        this.blinky.spawn(this.pacMan.getCurrentBlock());
     }
 
     @Override
@@ -58,19 +61,18 @@ public class Game extends PApplet {
             this.loop();
             this.map.draw(this.g);
 
-            this.pacMan.frameCounter++;
-            this.ghost1.frameCounter++;
+            AbstractPlayer.frameCounter++;
 
             this.pacMan.draw(this.g);
 
-            this.ghost1.moveToPacMan(this.pacMan.currentBlock);
-            this.ghost1.draw(this.g);
+            this.blinky.move(this.pacMan.getCurrentBlock());
+            this.blinky.draw(this.g);
 
             this.fill(0xFFFFFFFF);
             this.textSize(14);
-            this.text("Points: " + this.pacMan.pointCounter, 20, 30);
+            this.text("Points: " + this.pacMan.getPointCounter(), 20, 30);
 
-            if (this.pacMan.getCurrentBlock() == this.ghost1.getCurrentBlock()) {
+            if (this.pacMan.getCurrentBlock() == this.blinky.getCurrentBlock()) {
                 this.isRunning = false;
             }
 
@@ -80,7 +82,7 @@ public class Game extends PApplet {
 
             // Game Over
         } else {
-            this.menu.drawGameOver(this.g, this.pacMan.pointCounter);
+            this.menu.drawGameOver(this.g, this.pacMan.getPointCounter());
             this.noLoop();
         }
     }
