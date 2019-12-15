@@ -8,6 +8,10 @@ class Item extends ItemAbs {
         this.color = 0xFFff7142;
     }
 
+    /**
+     * Draw Item
+     * @param g Processing graphic
+     */
     void draw(PGraphics g) {
         g.fill(this.color);
         g.ellipse(this.x, this.y, radius * 2, radius * 2);

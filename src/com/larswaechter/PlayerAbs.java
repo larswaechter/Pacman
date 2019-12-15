@@ -9,11 +9,11 @@ class PlayerAbs extends PApplet {
     float x;
     float y;
 
-    float radius = 15;
-
     int color;
 
     Block currentBlock;
+
+    private float radius = 15;
 
     PlayerAbs(Block spawnBlock) {
         this.setCurrentBlock(spawnBlock);

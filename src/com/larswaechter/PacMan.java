@@ -1,9 +1,5 @@
 package com.larswaechter;
 
-import processing.core.PGraphics;
-
-import java.awt.*;
-
 class PacMan extends PlayerAbs {
     int pointCounter = 0;
 
@@ -45,6 +41,9 @@ class PacMan extends PlayerAbs {
         }
     }
 
+    /**
+     * Executed after move event
+     */
     private void movePostHandler() {
         if (this.getCurrentBlock().hasItem()) {
             this.pointCounter++;

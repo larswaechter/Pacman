@@ -3,7 +3,7 @@ package com.larswaechter;
 public class Main {
 
     public static void main(String[] args) {
-        Start start = new Start();
-        start.run();
+        Game game = new Game();
+        game.run();
     }
 }

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Map extends PApplet {
     // Array of all JSON maps
     static String[] maps = {
-            "res/map1.json"
+            "res/maps/map1.json"
     };
 
     // JSON map

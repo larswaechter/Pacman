@@ -28,15 +28,26 @@ class Block {
         return this.item;
     }
 
+    /**
+     * Place new item on block
+     */
     void placeItem() {
         Point center = this.getCenter();
         this.item = new Item((float) center.x, (float) center.y);
     }
 
+    /**
+     * Remove item from block
+     */
     void removeItem() {
         this.item = null;
     }
 
+    /**
+     * Check if block has an item
+     *
+     * @return If block has an item
+     */
     boolean hasItem() {
         return this.item != null;
     }
@@ -54,6 +65,11 @@ class Block {
         }
     }
 
+    /**
+     * Get coordinate of block center as Point
+     *
+     * @return Center Point
+     */
     Point getCenter() {
         int xCenter = (int) (this.x + (Block.width / 2));
         int yCenter = (int) (this.y + (Block.height / 2));
