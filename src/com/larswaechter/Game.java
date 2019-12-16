@@ -1,13 +1,15 @@
 package com.larswaechter;
 
-import com.larswaechter.map.Map;
-import com.larswaechter.players.*;
-
 import processing.core.PApplet;
 import processing.core.PShape;
 import processing.data.JSONArray;
 
+import com.larswaechter.map.Map;
+import com.larswaechter.players.*;
+
 public class Game extends PApplet {
+    public static int frameCount = 0;
+
     static int width = 600;
     static int height = 600;
 
@@ -59,32 +61,39 @@ public class Game extends PApplet {
             // Game
         } else if (this.isRunning) {
             this.loop();
+            Game.frameCount++;
+
             this.map.draw(this.g);
 
-            AbstractPlayer.frameCounter++;
-
-            this.pacMan.draw(this.g);
-
-            this.blinky.move(this.pacMan.getCurrentBlock());
-            this.blinky.draw(this.g);
+            this.thread("movePlayers");
 
             this.fill(0xFFFFFFFF);
             this.textSize(14);
             this.text("Points: " + this.pacMan.getPointCounter(), 20, 30);
 
-            if (this.pacMan.getCurrentBlock() == this.blinky.getCurrentBlock()) {
+            if (this.blinky.hasCaught(this.pacMan.getCurrentBlock())) {
                 this.isRunning = false;
             }
 
-            if (this.keyPressed) {
-                this.pacMan.move(this.keyCode);
-            }
+            this.pacMan.draw(this.g);
+            this.blinky.draw(this.g);
 
             // Game Over
         } else {
             this.menu.drawGameOver(this.g, this.pacMan.getPointCounter());
-            this.noLoop();
+            if (this.keyPressed && this.key == ' ') {
+                this.showMenu = false;
+                this.isRunning = true;
+                this.setup();
+            }
         }
+    }
+
+    public void movePlayers() {
+        if (this.keyPressed) {
+            this.pacMan.move(this.keyCode);
+        }
+        this.blinky.move(this.pacMan.getCurrentBlock());
     }
 
     /**

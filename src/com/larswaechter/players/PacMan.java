@@ -1,11 +1,12 @@
 package com.larswaechter.players;
 
+import com.larswaechter.Game;
 import com.larswaechter.map.*;
 
 public class PacMan extends AbstractPlayer {
     private int pointCounter = 0;
 
-    public PacMan(Block spawnBlock) {
+    public PacMan(AbstractBlock spawnBlock) {
         super(spawnBlock);
         this.setColor(0xFFFFFF00);
     }
@@ -20,7 +21,7 @@ public class PacMan extends AbstractPlayer {
      * @param direction Direction to move to
      */
     public void move(int direction) {
-        if (this.frameCounter % this.getSpeed() == 0) {
+        if (Game.frameCount % this.getSpeed() == 0) {
             switch (direction) {
                 // UP
                 case 38:
@@ -50,12 +51,18 @@ public class PacMan extends AbstractPlayer {
     }
 
     /**
-     * Executed after move event
+     * Called after move event
      */
     private void movePostHandler() {
-        if (this.getCurrentBlock().hasItem()) {
+        // Point
+        if (this.getCurrentBlock().hasPointItem()) {
             this.pointCounter++;
             this.getCurrentBlock().removeItem();
+        }
+
+        // Beam
+        if(this.getCurrentBlock().getClass().equals(BeamBlock.class)) {
+            this.moveToBlock(Map.getRandomBlock());
         }
     }
 

@@ -8,7 +8,7 @@ public class Pinky extends AbstractGhost {
     public Pinky() {
         super();
         this.setColor(AbstractGhost.colors[1]);
-        this.setSpeed(8);
+        this.setSpeed(6);
     }
 
     /**

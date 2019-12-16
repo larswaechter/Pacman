@@ -1,30 +1,27 @@
 package com.larswaechter.players;
 
-import com.larswaechter.map.Block;
-import com.larswaechter.items.Point;
+import java.awt.*;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
 
-public abstract class AbstractPlayer extends PApplet {
-    public static float frameCounter = 0;
+import com.larswaechter.map.AbstractBlock;
 
+public abstract class AbstractPlayer extends PApplet {
     private float x;
     private float y;
 
-    private Block currentBlock;
+    private AbstractBlock currentBlock;
 
     // Higher value = slower speed
     private float speed = 5;
 
     private int color;
 
-    private float radius = 15;
-
     AbstractPlayer() {
     }
 
-    AbstractPlayer(Block spawnBlock) {
+    AbstractPlayer(AbstractBlock spawnBlock) {
         this.moveToBlock(spawnBlock);
         this.getCurrentBlock().removeItem();
     }
@@ -36,7 +33,7 @@ public abstract class AbstractPlayer extends PApplet {
      */
     public void draw(PGraphics g) {
         g.fill(this.color);
-        g.ellipse(this.x, this.y, this.radius * 2, this.radius * 2);
+        g.ellipse(this.x, this.y, 30, 30);
     }
 
     /**
@@ -44,13 +41,13 @@ public abstract class AbstractPlayer extends PApplet {
      *
      * @param block Block to move to
      */
-    void moveToBlock(Block block) {
+    void moveToBlock(AbstractBlock block) {
         this.setCurrentBlock(block);
 
         // Update coordinates on map
         Point blockCenter = block.getCenter();
-        this.x = blockCenter.getX();
-        this.y = blockCenter.getY();
+        this.x = (float) blockCenter.getX();
+        this.y = (float) blockCenter.getY();
     }
 
     /**
@@ -58,7 +55,7 @@ public abstract class AbstractPlayer extends PApplet {
      *
      * @return Block
      */
-    public Block getCurrentBlock() {
+    public AbstractBlock getCurrentBlock() {
         return currentBlock;
     }
 
@@ -67,7 +64,7 @@ public abstract class AbstractPlayer extends PApplet {
      *
      * @param currentBlock Block
      */
-    private void setCurrentBlock(Block currentBlock) {
+    private void setCurrentBlock(AbstractBlock currentBlock) {
         this.currentBlock = currentBlock;
     }
 

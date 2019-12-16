@@ -1,5 +1,6 @@
 package com.larswaechter.players;
 
+import com.larswaechter.Game;
 import com.larswaechter.map.*;
 
 /**
@@ -11,7 +12,7 @@ public class Blinky extends AbstractGhost {
     public Blinky() {
         super();
         this.setColor(AbstractGhost.colors[0]);
-        this.setSpeed(8);
+        this.setSpeed(7);
     }
 
     /**
@@ -19,8 +20,8 @@ public class Blinky extends AbstractGhost {
      *
      * @param pacManPosition Current PacMan position
      */
-    public void spawn(Block pacManPosition) {
-        Block randomBlock;
+    public void spawn(AbstractBlock pacManPosition) {
+        AbstractBlock randomBlock;
 
         do {
             randomBlock = Map.getRandomBlock();
@@ -34,8 +35,8 @@ public class Blinky extends AbstractGhost {
      *
      * @param block Block to hunt
      */
-    public void move(Block block) {
-        if (AbstractPlayer.frameCounter % this.getSpeed() == 0) {
+    public void move(AbstractBlock block) {
+        if (Game.frameCount % this.getSpeed() == 0) {
             this.moveToBlock(Map.getNextBlockToTakeToReachTarget(this.getCurrentBlock(), block));
         }
 
