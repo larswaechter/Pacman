@@ -12,7 +12,7 @@ public class Blinky extends AbstractGhost {
     public Blinky() {
         super();
         this.setColor(AbstractGhost.colors[0]);
-        this.setSpeed(7);
+        this.setSpeed(2);
     }
 
     /**

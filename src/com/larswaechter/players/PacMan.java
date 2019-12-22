@@ -21,32 +21,30 @@ public class PacMan extends AbstractPlayer {
      * @param direction Direction to move to
      */
     public void move(int direction) {
-        if (Game.frameCount % this.getSpeed() == 0) {
-            switch (direction) {
-                // UP
-                case 38:
-                    this.moveUp();
-                    this.movePostHandler();
-                    break;
+        switch (direction) {
+            // UP
+            case 38:
+                this.moveUp();
+                this.movePostHandler();
+                break;
 
-                // DOWN
-                case 40:
-                    this.moveDown();
-                    this.movePostHandler();
-                    break;
+            // DOWN
+            case 40:
+                this.moveDown();
+                this.movePostHandler();
+                break;
 
-                // LEFT
-                case 37:
-                    this.moveLeft();
-                    this.movePostHandler();
-                    break;
+            // LEFT
+            case 37:
+                this.moveLeft();
+                this.movePostHandler();
+                break;
 
-                // RIGHT
-                case 39:
-                    this.moveRight();
-                    this.movePostHandler();
-                    break;
-            }
+            // RIGHT
+            case 39:
+                this.moveRight();
+                this.movePostHandler();
+                break;
         }
     }
 
@@ -61,7 +59,7 @@ public class PacMan extends AbstractPlayer {
         }
 
         // Beam
-        if(this.getCurrentBlock().getClass().equals(BeamBlock.class)) {
+        if (this.getCurrentBlock().getClass().equals(BeamBlock.class)) {
             this.moveToBlock(Map.getRandomBlock());
         }
     }

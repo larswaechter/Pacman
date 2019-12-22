@@ -37,6 +37,15 @@ public abstract class AbstractPlayer extends PApplet {
     }
 
     /**
+     * Get current block player is positioned on
+     *
+     * @return Block
+     */
+    public AbstractBlock getCurrentBlock() {
+        return currentBlock;
+    }
+
+    /**
      * Move player to given block
      *
      * @param block Block to move to
@@ -51,12 +60,11 @@ public abstract class AbstractPlayer extends PApplet {
     }
 
     /**
-     * Get current block player is positioned on
+     * TODO: Approach bloack with given frequence
      *
-     * @return Block
+     * @param block Block to approach
      */
-    public AbstractBlock getCurrentBlock() {
-        return currentBlock;
+    void approachBlock(AbstractBlock block) {
     }
 
     /**

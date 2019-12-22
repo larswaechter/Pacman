@@ -13,16 +13,16 @@ public class Map {
             "res/maps/map1.json"
     };
 
-    // 2D Array of all blocks
-    private static AbstractBlock[][] blocks;
-    private static ArrayList<AbstractBlock> blocksMap = new ArrayList<AbstractBlock>();
+    // 2D Array Matrix of all blocks
+    public static AbstractBlock[][] blocks;
+    private static ArrayList<AbstractBlock> blocksList = new ArrayList<AbstractBlock>();
 
     public Map(JSONArray jsonMap) {
         this.generateBlocks(jsonMap);
     }
 
     /**
-     * Get upper block from block
+     * Get upper block from given block
      *
      * @param block Block to get upper block from
      * @return Upper block
@@ -31,11 +31,10 @@ public class Map {
         AbstractBlock[] colCurrent = Map.blocks[block.getMapIdxX()];
         AbstractBlock blockAbove = colCurrent[Math.max(block.getMapIdxY() - 1, 0)];
         return blockAbove != null ? blockAbove : block;
-
     }
 
     /**
-     * Get lower block from block
+     * Get lower block from given block
      *
      * @param block BLock to get lower block from
      * @return Lower block
@@ -47,7 +46,7 @@ public class Map {
     }
 
     /**
-     * Get left block from block
+     * Get left block from given block
      *
      * @param block Block to get left block from
      * @return Left block
@@ -58,7 +57,7 @@ public class Map {
     }
 
     /**
-     * Get right block from block
+     * Get right block from given block
      *
      * @param block Block to get right block from
      * @return Right block
@@ -103,7 +102,7 @@ public class Map {
         AbstractBlock randomBlock;
 
         do {
-            randomBlock = Map.blocksMap.get((int) Utility.getRandomNumber(0, Map.blocksMap.size()));
+            randomBlock = Map.blocksList.get((int) Utility.getRandomNumber(0, Map.blocksList.size()));
         } while (randomBlock == null);
 
         return randomBlock;
@@ -117,28 +116,13 @@ public class Map {
     public static ArrayList<BeamBlock> getBeamBlocks() {
         ArrayList<BeamBlock> beamBlocks = new ArrayList<BeamBlock>();
 
-        for (AbstractBlock block : Map.blocksMap) {
+        for (AbstractBlock block : Map.blocksList) {
             if (block != null && block.getClass().equals(BeamBlock.class)) {
                 beamBlocks.add((BeamBlock) block);
             }
         }
 
         return beamBlocks;
-    }
-
-    /**
-     * Draw map
-     *
-     * @param g Processing graphic
-     */
-    public void draw(PGraphics g) {
-        g.fill(0xFFFFFFFF);
-
-        // Draw blocks
-        for (AbstractBlock block : Map.blocksMap) {
-            if (block != null)
-                block.draw(g);
-        }
     }
 
     /**
@@ -201,6 +185,21 @@ public class Map {
     }
 
     /**
+     * Draw map
+     *
+     * @param g Processing graphic
+     */
+    public void draw(PGraphics g) {
+        g.fill(0xFFFFFFFF);
+
+        // Draw blocks
+        for (AbstractBlock block : Map.blocksList) {
+            if (block != null)
+                block.draw(g);
+        }
+    }
+
+    /**
      * Generate blocks array from JSON
      *
      * @param jsonMap JSON map
@@ -224,20 +223,20 @@ public class Map {
                     case 1:
                         Block block = new Block(xPos, yPos, i, k);
                         Map.blocks[i][k] = block;
-                        Map.blocksMap.add(block);
+                        Map.blocksList.add(block);
                         break;
 
                     // Beam
                     case 2:
                         BeamBlock beamBlock = new BeamBlock(xPos, yPos, i, k);
                         Map.blocks[i][k] = beamBlock;
-                        Map.blocksMap.add(beamBlock);
+                        Map.blocksList.add(beamBlock);
                         break;
 
                     // No block
                     default:
                         Map.blocks[i][k] = null;
-                        Map.blocksMap.add(null);
+                        Map.blocksList.add(null);
                         break;
                 }
             }

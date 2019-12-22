@@ -13,18 +13,6 @@ public abstract class AbstractItem {
         this.y = y;
     }
 
-    public float getX() {
-        return x;
-    }
-
-    public float getY() {
-        return y;
-    }
-
-    void setColor(int color) {
-        this.color = color;
-    }
-
     /**
      * Draw Point
      *
@@ -34,4 +22,9 @@ public abstract class AbstractItem {
         g.fill(this.color);
         g.ellipse(this.x, this.y, 10, 10);
     }
+
+    void setColor(int color) {
+        this.color = color;
+    }
+
 }

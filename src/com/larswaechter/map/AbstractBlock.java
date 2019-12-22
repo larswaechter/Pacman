@@ -30,18 +30,6 @@ public class AbstractBlock {
         this.mapIdxY = mapIdxY;
     }
 
-    int getMapIdxX() {
-        return mapIdxX;
-    }
-
-    int getMapIdxY() {
-        return mapIdxY;
-    }
-
-    void setColor(int color) {
-        this.color = color;
-    }
-
     /**
      * Get distance between two blocks with Manhattan-Metric
      *
@@ -51,10 +39,6 @@ public class AbstractBlock {
      */
     public static int getBlockDistance(AbstractBlock a, AbstractBlock b) {
         return Math.abs(a.mapIdxX - b.mapIdxX) + Math.abs(a.mapIdxY - b.mapIdxY);
-    }
-
-    AbstractItem getItem() {
-        return this.item;
     }
 
     void setItem(AbstractItem item) {
@@ -69,15 +53,6 @@ public class AbstractBlock {
     }
 
     /**
-     * Check if block has an item
-     *
-     * @return If block has an item
-     */
-    public boolean hasItem() {
-        return this.item != null;
-    }
-
-    /**
      * Place new PointItem on block
      */
     void setPointItem() {
@@ -85,21 +60,13 @@ public class AbstractBlock {
         this.setItem(new PointItem((float) center.getX(), (float) center.getY()));
     }
 
+    /**
+     * Check if block has PointItem
+     *
+     * @return If block has PointItem
+     */
     public boolean hasPointItem() {
         return this.item != null && this.item.getClass().equals(PointItem.class);
-    }
-
-    /**
-     * Draw map
-     *
-     * @param g Processing graphic
-     */
-    void draw(PGraphics g) {
-        g.fill(this.color);
-        g.rect(this.x, this.y, Block.width, Block.height);
-        if (this.item != null) {
-            this.item.draw(g);
-        }
     }
 
     /**
@@ -128,6 +95,31 @@ public class AbstractBlock {
     @Override
     public int hashCode() {
         return Objects.hash(mapIdxX, mapIdxY, x, y);
+    }
+
+    int getMapIdxX() {
+        return mapIdxX;
+    }
+
+    int getMapIdxY() {
+        return mapIdxY;
+    }
+
+    void setColor(int color) {
+        this.color = color;
+    }
+
+    /**
+     * Draw map
+     *
+     * @param g Processing graphic
+     */
+    void draw(PGraphics g) {
+        g.fill(this.color);
+        g.rect(this.x, this.y, Block.width, Block.height);
+        if (this.item != null) {
+            this.item.draw(g);
+        }
     }
 
 

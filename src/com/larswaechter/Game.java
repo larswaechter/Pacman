@@ -7,6 +7,10 @@ import processing.data.JSONArray;
 import com.larswaechter.map.Map;
 import com.larswaechter.players.*;
 
+enum GameStates {
+    Menu, Play, GameOver, GameWon
+}
+
 public class Game extends PApplet {
     public static int frameCount = 0;
 
@@ -18,11 +22,10 @@ public class Game extends PApplet {
     private PacMan pacMan;
     private Blinky blinky;
 
-    private boolean showMenu = true;
-    private boolean isRunning = false;
+    private GameStates state;
 
     void run() {
-        this.runSketch(new String[]{""}, this);
+        Game.runSketch(new String[]{""}, this);
     }
 
     @Override
@@ -32,68 +35,88 @@ public class Game extends PApplet {
 
     @Override
     public void setup() {
-        background(0);
-        frameRate(20);
+        this.background(0);
+        this.frameRate(8);
 
         this.menu = new Menu(this.loadPacManShape());
-
-        // Generate map
-        this.map = new Map(this.loadRandomMap());
-
-        // Create player
-        this.pacMan = new PacMan(Map.getRandomBlock());
-        this.blinky = new Blinky();
-        this.blinky.spawn(this.pacMan.getCurrentBlock());
+        this.state = GameStates.Menu;
     }
 
     @Override
     public void draw() {
         this.clear();
 
-        // Start Menu
-        if (this.showMenu) {
-            this.menu.draw(this.g);
-            if (this.keyPressed && this.key == ' ') {
-                this.showMenu = false;
-                this.isRunning = true;
-            }
-
-            // Game
-        } else if (this.isRunning) {
-            this.loop();
-            Game.frameCount++;
-
-            this.map.draw(this.g);
-
-            this.thread("movePlayers");
-
-            this.fill(0xFFFFFFFF);
-            this.textSize(14);
-            this.text("Points: " + this.pacMan.getPointCounter(), 20, 30);
-
-            if (this.blinky.hasCaught(this.pacMan.getCurrentBlock())) {
-                this.isRunning = false;
-            }
-
-            this.pacMan.draw(this.g);
-            this.blinky.draw(this.g);
-
-            // Game Over
-        } else {
-            this.menu.drawGameOver(this.g, this.pacMan.getPointCounter());
-            if (this.keyPressed && this.key == ' ') {
-                this.showMenu = false;
-                this.isRunning = true;
-                this.setup();
-            }
+        switch (this.state) {
+            case Menu:
+                this.drawMenu();
+                break;
+            case Play:
+                this.drawGame();
+                break;
+            case GameOver:
+                this.drawGameOver();
+                break;
+            case GameWon:
+                this.drawGameWon();
+                break;
         }
     }
 
-    public void movePlayers() {
+    private void drawMenu() {
+        this.menu.draw(this.g);
+        if (this.keyPressed && this.key == ' ') {
+            this.initGame();
+        }
+    }
+
+    private void initGame() {
+        this.state = GameStates.Play;
+
+        // Generate map
+        this.map = new Map(this.loadRandomMap());
+
+        // Create player
+        this.pacMan = new PacMan(Map.getRandomBlock());
+
+        // Create ghosts
+        this.blinky = new Blinky();
+        this.blinky.spawn(this.pacMan.getCurrentBlock());
+    }
+
+    private void drawGame() {
+        Game.frameCount++;
+        this.drawPointStats();
+
+        this.map.draw(this.g);
+
         if (this.keyPressed) {
             this.pacMan.move(this.keyCode);
         }
+
         this.blinky.move(this.pacMan.getCurrentBlock());
+
+        if (this.blinky.hasCaught(this.pacMan.getCurrentBlock())) {
+            this.state = GameStates.GameOver;
+        }
+
+        this.pacMan.draw(this.g);
+        this.blinky.draw(this.g);
+    }
+
+    private void drawGameOver() {
+        this.menu.drawGameOver(this.g, this.pacMan.getPointCounter());
+        if (this.keyPressed && this.key == ' ') {
+            this.initGame();
+        }
+    }
+
+    private void drawGameWon() {
+    }
+
+    private void drawPointStats() {
+        this.fill(0xFFFFFFFF);
+        this.textSize(14);
+        this.text("Points: " + this.pacMan.getPointCounter(), 20, 30);
     }
 
     /**
