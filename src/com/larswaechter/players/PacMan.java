@@ -1,18 +1,31 @@
 package com.larswaechter.players;
 
-import com.larswaechter.Game;
+import com.larswaechter.Timer;
+import com.larswaechter.Utility;
+import com.larswaechter.items.*;
 import com.larswaechter.map.*;
+import processing.core.PGraphics;
+
+import java.util.HashMap;
 
 public class PacMan extends AbstractPlayer {
     private int pointCounter = 0;
+    private int pointMultiplicator = 1;
+    private boolean hasShield = false;
+
+    private HashMap<ItemTypes, Timer> timers = new HashMap<ItemTypes, Timer>();
 
     public PacMan(AbstractBlock spawnBlock) {
         super(spawnBlock);
-        this.setColor(0xFFFFFF00);
+        this.setColor(Utility.colorYellow);
     }
 
     public int getPointCounter() {
         return pointCounter;
+    }
+
+    public boolean getHasShield() {
+        return this.hasShield;
     }
 
     /**
@@ -49,17 +62,57 @@ public class PacMan extends AbstractPlayer {
     }
 
     /**
+     * Draw PacMan
+     *
+     * @param g Processing graphic
+     */
+    @Override
+    public void draw(PGraphics g) {
+        g.fill(this.hasShield ? Utility.colorCyan : Utility.colorYellow);
+        g.ellipse(this.getX(), this.getY(), AbstractPlayer.diameter, AbstractPlayer.diameter);
+    }
+
+    /**
+     * Remove expired timers from PacMan
+     */
+    public void checkTimers() {
+        // Shield timer
+        if (this.timers.get(ItemTypes.Shield) != null && this.timers.get(ItemTypes.Shield).tickAndVerify()) {
+            this.hasShield = false;
+            this.timers.remove(ItemTypes.Shield);
+        }
+
+        // PointMultiplicator timer
+        if (this.timers.get(ItemTypes.PointMultiplicator) != null && this.timers.get(ItemTypes.PointMultiplicator).tickAndVerify()) {
+            this.pointMultiplicator = 1;
+            this.timers.remove(ItemTypes.PointMultiplicator);
+        }
+    }
+
+    /**
      * Called after move event
      */
     private void movePostHandler() {
-        // Point
-        if (this.getCurrentBlock().hasPointItem()) {
-            this.pointCounter++;
+        // Block has an item
+        if (this.getCurrentBlock().getItem() != null) {
+            switch (this.getCurrentBlock().getItem().getType()) {
+                case Point:
+                    this.pointCounter += this.pointMultiplicator;
+                    break;
+                case PointMultiplicator:
+                    this.pointMultiplicator = ((PointMultiplicatorItem) this.getCurrentBlock().getItem()).getMultiplicator();
+                    this.timers.put(ItemTypes.PointMultiplicator, new Timer(PointMultiplicatorItem.ttl));
+                    break;
+                case Shield:
+                    this.hasShield = true;
+                    this.timers.put(ItemTypes.Shield, new Timer(ShieldItem.ttl));
+                    break;
+            }
             this.getCurrentBlock().removeItem();
         }
 
         // Beam
-        if (this.getCurrentBlock().getClass().equals(BeamBlock.class)) {
+        if (this.getCurrentBlock().getType() == BlockTypes.Beam) {
             this.moveToBlock(Map.getRandomBlock());
         }
     }

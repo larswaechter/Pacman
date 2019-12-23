@@ -1,9 +1,10 @@
 package com.larswaechter.map;
 
+import com.larswaechter.Utility;
+
 public class Block extends AbstractBlock {
     Block(float x, float y, int mapIdxX, int mapIdxY) {
-        super(x, y, mapIdxX, mapIdxY);
-        this.setPointItem();
-        this.setColor(0xFFFFFFFF);
+        super(BlockTypes.Block, x, y, mapIdxX, mapIdxY);
+        this.setColor(Utility.colorWhite);
     }
 }

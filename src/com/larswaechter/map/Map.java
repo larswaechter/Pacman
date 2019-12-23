@@ -2,6 +2,7 @@ package com.larswaechter.map;
 
 import java.util.ArrayList;
 
+import com.larswaechter.items.ItemTypes;
 import processing.core.PGraphics;
 import processing.data.JSONArray;
 
@@ -16,6 +17,8 @@ public class Map {
     // 2D Array Matrix of all blocks
     public static AbstractBlock[][] blocks;
     private static ArrayList<AbstractBlock> blocksList = new ArrayList<AbstractBlock>();
+
+    public static int pointsToCollect = 0;
 
     public Map(JSONArray jsonMap) {
         this.generateBlocks(jsonMap);
@@ -117,12 +120,36 @@ public class Map {
         ArrayList<BeamBlock> beamBlocks = new ArrayList<BeamBlock>();
 
         for (AbstractBlock block : Map.blocksList) {
-            if (block != null && block.getClass().equals(BeamBlock.class)) {
+            if (block != null && block.getType() == BlockTypes.Beam) {
                 beamBlocks.add((BeamBlock) block);
             }
         }
 
         return beamBlocks;
+    }
+
+    /**
+     * Generates randomly random items
+     *
+     * @param frameCounter FrameCounter
+     */
+    public static void generateRandomItems(int frameCounter) {
+
+    }
+
+    /**
+     * Draw map
+     *
+     * @param g Processing graphic
+     */
+    public void draw(PGraphics g) {
+        g.fill(0xFFFFFFFF);
+
+        // Draw blocks
+        for (AbstractBlock block : Map.blocksList) {
+            if (block != null)
+                block.draw(g);
+        }
     }
 
     /**
@@ -185,21 +212,6 @@ public class Map {
     }
 
     /**
-     * Draw map
-     *
-     * @param g Processing graphic
-     */
-    public void draw(PGraphics g) {
-        g.fill(0xFFFFFFFF);
-
-        // Draw blocks
-        for (AbstractBlock block : Map.blocksList) {
-            if (block != null)
-                block.draw(g);
-        }
-    }
-
-    /**
      * Generate blocks array from JSON
      *
      * @param jsonMap JSON map
@@ -221,9 +233,11 @@ public class Map {
                 switch (col.getInt(k)) {
                     // Point
                     case 1:
-                        Block block = new Block(xPos, yPos, i, k);
-                        Map.blocks[i][k] = block;
-                        Map.blocksList.add(block);
+                        Block pointBlock = new Block(xPos, yPos, i, k);
+                        pointBlock.generateItem(ItemTypes.Point);
+                        Map.blocks[i][k] = pointBlock;
+                        Map.blocksList.add(pointBlock);
+                        Map.pointsToCollect++;
                         break;
 
                     // Beam
@@ -233,7 +247,7 @@ public class Map {
                         Map.blocksList.add(beamBlock);
                         break;
 
-                    // No block
+                    // No block => Wall
                     default:
                         Map.blocks[i][k] = null;
                         Map.blocksList.add(null);

@@ -1,5 +1,7 @@
 package com.larswaechter.players;
 
+import com.larswaechter.Utility;
+
 /**
  * Pink Ghost
  */
@@ -7,7 +9,7 @@ package com.larswaechter.players;
 public class Pinky extends AbstractGhost {
     public Pinky() {
         super();
-        this.setColor(AbstractGhost.colors[1]);
+        this.setColor(Utility.colorGhostPink);
         this.setSpeed(6);
     }
 

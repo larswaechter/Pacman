@@ -13,6 +13,7 @@ enum GameStates {
 
 public class Game extends PApplet {
     public static int frameCount = 0;
+    public static int framesPerSecond = 8;
 
     static int width = 600;
     static int height = 600;
@@ -36,7 +37,7 @@ public class Game extends PApplet {
     @Override
     public void setup() {
         this.background(0);
-        this.frameRate(8);
+        this.frameRate(Game.framesPerSecond);
 
         this.menu = new Menu(this.loadPacManShape());
         this.state = GameStates.Menu;
@@ -62,6 +63,9 @@ public class Game extends PApplet {
         }
     }
 
+    /**
+     * Draw Menu (start) screen
+     */
     private void drawMenu() {
         this.menu.draw(this.g);
         if (this.keyPressed && this.key == ' ') {
@@ -69,6 +73,9 @@ public class Game extends PApplet {
         }
     }
 
+    /**
+     * Init Game
+     */
     private void initGame() {
         this.state = GameStates.Play;
 
@@ -83,26 +90,56 @@ public class Game extends PApplet {
         this.blinky.spawn(this.pacMan.getCurrentBlock());
     }
 
+    /**
+     * Draw Game screen
+     */
     private void drawGame() {
         Game.frameCount++;
-        this.drawPointStats();
 
+        this.drawPointStats();
+        this.checkForFinish();
+
+        Map.generateRandomItems(Game.frameCount);
         this.map.draw(this.g);
+
+        this.pacMan.checkTimers();
+
 
         if (this.keyPressed) {
             this.pacMan.move(this.keyCode);
         }
 
-        this.blinky.move(this.pacMan.getCurrentBlock());
-
-        if (this.blinky.hasCaught(this.pacMan.getCurrentBlock())) {
-            this.state = GameStates.GameOver;
-        }
+        // this.blinky.move(this.pacMan.getCurrentBlock());
 
         this.pacMan.draw(this.g);
         this.blinky.draw(this.g);
     }
 
+    /**
+     * Draw Game PointStats
+     */
+    private void drawPointStats() {
+        this.fill(Utility.colorWhite);
+        this.textSize(14);
+        this.text("Points: " + this.pacMan.getPointCounter() + " / " + Map.pointsToCollect, 20, 30);
+    }
+
+    /*
+     * Finishing scenarios:
+     *  - Get caught
+     *  - Collected all points
+     */
+    private void checkForFinish() {
+        if (!this.pacMan.getHasShield() && this.blinky.hasCaught(this.pacMan.getCurrentBlock())) {
+            this.state = GameStates.GameOver;
+        } else if (this.pacMan.getPointCounter() == Map.pointsToCollect) {
+            this.state = GameStates.GameWon;
+        }
+    }
+
+    /**
+     * Draw Game Over screen
+     */
     private void drawGameOver() {
         this.menu.drawGameOver(this.g, this.pacMan.getPointCounter());
         if (this.keyPressed && this.key == ' ') {
@@ -110,13 +147,11 @@ public class Game extends PApplet {
         }
     }
 
+    /**
+     * Draw Game won screen
+     */
     private void drawGameWon() {
-    }
-
-    private void drawPointStats() {
-        this.fill(0xFFFFFFFF);
-        this.textSize(14);
-        this.text("Points: " + this.pacMan.getPointCounter(), 20, 30);
+        this.menu.drawGameWon(this.g, this.pacMan.getPointCounter());
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.larswaechter.players;
 
 import com.larswaechter.Game;
+import com.larswaechter.Utility;
 import com.larswaechter.map.*;
 
 /**
@@ -11,7 +12,7 @@ public class Blinky extends AbstractGhost {
 
     public Blinky() {
         super();
-        this.setColor(AbstractGhost.colors[0]);
+        this.setColor(Utility.colorGhostRed);
         this.setSpeed(2);
     }
 

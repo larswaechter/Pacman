@@ -7,9 +7,6 @@ import com.larswaechter.map.AbstractBlock;
  */
 
 public abstract class AbstractGhost extends AbstractPlayer {
-    // Red, Pink, Cyan, Orange
-    static final int[] colors = {0xFFFF0000, 0xFFFFB8FF, 0xFF00FFFF, 0xFFFFB852};
-
     public boolean hasCaught(AbstractBlock block) {
         return this.getCurrentBlock().equals(block);
     }

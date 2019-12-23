@@ -3,14 +3,14 @@ package com.larswaechter.map;
 import java.awt.*;
 import java.util.Objects;
 
+import com.larswaechter.items.*;
 import processing.core.PGraphics;
-
-import com.larswaechter.items.AbstractItem;
-import com.larswaechter.items.PointItem;
 
 public class AbstractBlock {
     static final int width = 40;
     static final int height = 40;
+
+    private BlockTypes type;
 
     // Positions in array map [x][y]
     private int mapIdxX;
@@ -23,7 +23,8 @@ public class AbstractBlock {
 
     private AbstractItem item;
 
-    AbstractBlock(float x, float y, int mapIdxX, int mapIdxY) {
+    AbstractBlock(BlockTypes type, float x, float y, int mapIdxX, int mapIdxY) {
+        this.type = type;
         this.x = x;
         this.y = y;
         this.mapIdxX = mapIdxX;
@@ -41,32 +42,37 @@ public class AbstractBlock {
         return Math.abs(a.mapIdxX - b.mapIdxX) + Math.abs(a.mapIdxY - b.mapIdxY);
     }
 
-    void setItem(AbstractItem item) {
-        this.item = item;
+    /**
+     * Generate block item based on type
+     *
+     * @param type Type of item to generate
+     */
+    public void generateItem(ItemTypes type) {
+        Point center = this.getCenter();
+
+        switch (type) {
+            case Point:
+                this.setItem(new PointItem((float) center.getX(), (float) center.getY()));
+                break;
+            case Shield:
+                this.setItem(new ShieldItem((float) center.getX(), (float) center.getY()));
+                break;
+            case PointMultiplicator:
+                this.setItem(new PointMultiplicatorItem((float) center.getX(), (float) center.getY(), 2));
+                break;
+        }
     }
 
-    /**
-     * Remove item from block
-     */
+    public AbstractItem getItem() {
+        return this.item;
+    }
+
     public void removeItem() {
         this.item = null;
     }
 
-    /**
-     * Place new PointItem on block
-     */
-    void setPointItem() {
-        Point center = this.getCenter();
-        this.setItem(new PointItem((float) center.getX(), (float) center.getY()));
-    }
-
-    /**
-     * Check if block has PointItem
-     *
-     * @return If block has PointItem
-     */
-    public boolean hasPointItem() {
-        return this.item != null && this.item.getClass().equals(PointItem.class);
+    public BlockTypes getType() {
+        return this.type;
     }
 
     /**
@@ -107,6 +113,10 @@ public class AbstractBlock {
 
     void setColor(int color) {
         this.color = color;
+    }
+
+    void setItem(AbstractItem item) {
+        this.item = item;
     }
 
     /**

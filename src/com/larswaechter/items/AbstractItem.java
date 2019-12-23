@@ -8,7 +8,10 @@ public abstract class AbstractItem {
 
     private int color;
 
-    AbstractItem(float x, float y) {
+    private ItemTypes type;
+
+    AbstractItem(ItemTypes type, float x, float y) {
+        this.type = type;
         this.x = x;
         this.y = y;
     }
@@ -21,6 +24,10 @@ public abstract class AbstractItem {
     public void draw(PGraphics g) {
         g.fill(this.color);
         g.ellipse(this.x, this.y, 10, 10);
+    }
+
+    public ItemTypes getType() {
+        return this.type;
     }
 
     void setColor(int color) {
