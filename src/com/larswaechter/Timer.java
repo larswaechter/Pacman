@@ -7,6 +7,9 @@ public class Timer {
     private int frameRateEnd;
     private int frameRateCurrent;
 
+    /**
+     * @param ttl Time to live in seconds
+     */
     public Timer(int ttl) {
         this.frameRateCurrent = Game.frameCount;
         this.frameRateEnd = this.frameRateCurrent + ((int) Math.pow(Game.framesPerSecond, 2) * ttl);

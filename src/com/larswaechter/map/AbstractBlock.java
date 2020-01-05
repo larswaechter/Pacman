@@ -57,8 +57,8 @@ public class AbstractBlock {
             case Shield:
                 this.setItem(new ShieldItem((float) center.getX(), (float) center.getY()));
                 break;
-            case PointMultiplicator:
-                this.setItem(new PointMultiplicatorItem((float) center.getX(), (float) center.getY(), 2));
+            case Multiplicator:
+                this.setItem(new MultiplicatorItem((float) center.getX(), (float) center.getY(), 2));
                 break;
         }
     }

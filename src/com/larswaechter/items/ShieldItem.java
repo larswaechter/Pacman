@@ -10,8 +10,4 @@ public class ShieldItem extends AbstractItem {
         super(ItemTypes.Shield, x, y);
         this.setColor(Utility.colorCyan);
     }
-
-    public int getTtl() {
-        return ttl;
-    }
 }

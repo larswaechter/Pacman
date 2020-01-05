@@ -2,10 +2,10 @@ package com.larswaechter.map;
 
 import java.util.ArrayList;
 
-import com.larswaechter.items.ItemTypes;
 import processing.core.PGraphics;
 import processing.data.JSONArray;
 
+import com.larswaechter.items.ItemTypes;
 import com.larswaechter.Utility;
 
 public class Map {
@@ -143,7 +143,7 @@ public class Map {
      * @param g Processing graphic
      */
     public void draw(PGraphics g) {
-        g.fill(0xFFFFFFFF);
+        g.fill(Utility.colorWhite);
 
         // Draw blocks
         for (AbstractBlock block : Map.blocksList) {

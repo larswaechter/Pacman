@@ -102,14 +102,14 @@ public class Game extends PApplet {
         Map.generateRandomItems(Game.frameCount);
         this.map.draw(this.g);
 
-        this.pacMan.checkTimers();
+        this.pacMan.checkItemTimers();
 
 
         if (this.keyPressed) {
             this.pacMan.move(this.keyCode);
         }
 
-        // this.blinky.move(this.pacMan.getCurrentBlock());
+        this.blinky.move(this.pacMan.getCurrentBlock());
 
         this.pacMan.draw(this.g);
         this.blinky.draw(this.g);

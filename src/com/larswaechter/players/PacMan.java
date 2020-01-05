@@ -1,12 +1,14 @@
 package com.larswaechter.players;
 
+import java.util.HashMap;
+
+import processing.core.PGraphics;
+
 import com.larswaechter.Timer;
 import com.larswaechter.Utility;
 import com.larswaechter.items.*;
 import com.larswaechter.map.*;
-import processing.core.PGraphics;
 
-import java.util.HashMap;
 
 public class PacMan extends AbstractPlayer {
     private int pointCounter = 0;
@@ -75,7 +77,7 @@ public class PacMan extends AbstractPlayer {
     /**
      * Remove expired timers from PacMan
      */
-    public void checkTimers() {
+    public void checkItemTimers() {
         // Shield timer
         if (this.timers.get(ItemTypes.Shield) != null && this.timers.get(ItemTypes.Shield).tickAndVerify()) {
             this.hasShield = false;
@@ -83,9 +85,9 @@ public class PacMan extends AbstractPlayer {
         }
 
         // PointMultiplicator timer
-        if (this.timers.get(ItemTypes.PointMultiplicator) != null && this.timers.get(ItemTypes.PointMultiplicator).tickAndVerify()) {
+        if (this.timers.get(ItemTypes.Multiplicator) != null && this.timers.get(ItemTypes.Multiplicator).tickAndVerify()) {
             this.pointMultiplicator = 1;
-            this.timers.remove(ItemTypes.PointMultiplicator);
+            this.timers.remove(ItemTypes.Multiplicator);
         }
     }
 
@@ -99,13 +101,13 @@ public class PacMan extends AbstractPlayer {
                 case Point:
                     this.pointCounter += this.pointMultiplicator;
                     break;
-                case PointMultiplicator:
-                    this.pointMultiplicator = ((PointMultiplicatorItem) this.getCurrentBlock().getItem()).getMultiplicator();
-                    this.timers.put(ItemTypes.PointMultiplicator, new Timer(PointMultiplicatorItem.ttl));
+                case Multiplicator:
+                    this.pointMultiplicator = ((MultiplicatorItem) this.getCurrentBlock().getItem()).getMultiplicator();
+                    this.setItemTimer(ItemTypes.Multiplicator);
                     break;
                 case Shield:
                     this.hasShield = true;
-                    this.timers.put(ItemTypes.Shield, new Timer(ShieldItem.ttl));
+                    this.setItemTimer(ItemTypes.Shield);
                     break;
             }
             this.getCurrentBlock().removeItem();
@@ -114,6 +116,17 @@ public class PacMan extends AbstractPlayer {
         // Beam
         if (this.getCurrentBlock().getType() == BlockTypes.Beam) {
             this.moveToBlock(Map.getRandomBlock());
+        }
+    }
+
+    private void setItemTimer(ItemTypes type) {
+        switch (type) {
+            case Multiplicator:
+                this.timers.put(ItemTypes.Multiplicator, new Timer(MultiplicatorItem.ttl));
+                break;
+            case Shield:
+                this.timers.put(ItemTypes.Shield, new Timer(ShieldItem.ttl));
+                break;
         }
     }
 

@@ -61,7 +61,7 @@ public abstract class AbstractPlayer extends PApplet {
     }
 
     /**
-     * TODO: Approach bloack with given frequence
+     * TODO: Approach bloack with given frequency
      *
      * @param block Block to approach
      */

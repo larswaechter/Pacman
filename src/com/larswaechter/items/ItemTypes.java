@@ -1,5 +1,5 @@
 package com.larswaechter.items;
 
 public enum ItemTypes {
-    Point, PointMultiplicator, Shield,
+    Point, Multiplicator, Shield,
 }
