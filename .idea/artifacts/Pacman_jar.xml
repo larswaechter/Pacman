@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Pacman:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Pacman_jar</output-path>
+    <root id="archive" name="Pacman.jar">
+      <element id="module-output" name="Pacman" />
+      <element id="extracted-dir" path="D:/02_Uni_Code/Semester_01/OOP/Processing/src/app/core.jar" path-in-jar="/" />
+      <element id="directory" name="res">
+        <element id="dir-copy" path="$PROJECT_DIR$/res" />
+      </element>
+    </root>
+  </artifact>
+</component>
