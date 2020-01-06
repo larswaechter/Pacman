@@ -2,12 +2,13 @@ package com.larswaechter.players;
 
 import java.awt.*;
 
-import processing.core.PApplet;
 import processing.core.PGraphics;
+
+import com.larswaechter.DrawInterface;
 
 import com.larswaechter.map.AbstractBlock;
 
-public abstract class AbstractPlayer extends PApplet {
+public abstract class AbstractPlayer implements DrawInterface {
     public static int diameter = 30;
 
     private float x;
@@ -16,7 +17,7 @@ public abstract class AbstractPlayer extends PApplet {
     private AbstractBlock currentBlock;
 
     // Higher value = slower speed
-    private float speed = 5;
+    private float speed = 1;
 
     private int color;
 
@@ -32,6 +33,7 @@ public abstract class AbstractPlayer extends PApplet {
      *
      * @param g Processing graphic
      */
+    @Override
     public void draw(PGraphics g) {
         g.fill(this.color);
         g.ellipse(this.x, this.y, AbstractPlayer.diameter, AbstractPlayer.diameter);
@@ -61,14 +63,6 @@ public abstract class AbstractPlayer extends PApplet {
     }
 
     /**
-     * TODO: Approach bloack with given frequency
-     *
-     * @param block Block to approach
-     */
-    void approachBlock(AbstractBlock block) {
-    }
-
-    /**
      * Set current block player is positioned on
      *
      * @param currentBlock Block
@@ -83,10 +77,6 @@ public abstract class AbstractPlayer extends PApplet {
 
     void setSpeed(float speed) {
         this.speed = speed;
-    }
-
-    public int getColor() {
-        return color;
     }
 
     void setColor(int color) {

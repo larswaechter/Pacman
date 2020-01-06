@@ -2,6 +2,7 @@ package com.larswaechter.players;
 
 import java.util.HashMap;
 
+import com.larswaechter.Game;
 import processing.core.PGraphics;
 
 import com.larswaechter.Timer;
@@ -9,10 +10,11 @@ import com.larswaechter.Utility;
 import com.larswaechter.items.*;
 import com.larswaechter.map.*;
 
-
 public class PacMan extends AbstractPlayer {
+    private int appleCounter = 0;
     private int pointCounter = 0;
     private int pointMultiplicator = 1;
+
     private boolean hasShield = false;
 
     private HashMap<ItemTypes, Timer> timers = new HashMap<ItemTypes, Timer>();
@@ -23,7 +25,11 @@ public class PacMan extends AbstractPlayer {
     }
 
     public int getPointCounter() {
-        return pointCounter;
+        return this.pointCounter;
+    }
+
+    public int getAppleCounter() {
+        return this.appleCounter;
     }
 
     public boolean getHasShield() {
@@ -36,30 +42,33 @@ public class PacMan extends AbstractPlayer {
      * @param direction Direction to move to
      */
     public void move(int direction) {
-        switch (direction) {
-            // UP
-            case 38:
-                this.moveUp();
-                this.movePostHandler();
-                break;
+        if (Game.frameCount % this.getSpeed() == 0) {
+            switch (direction) {
+                // UP
+                case 38:
+                    this.moveUp();
+                    this.movePostHandler();
+                    break;
 
-            // DOWN
-            case 40:
-                this.moveDown();
-                this.movePostHandler();
-                break;
+                // DOWN
+                case 40:
+                    this.moveDown();
+                    this.movePostHandler();
+                    break;
 
-            // LEFT
-            case 37:
-                this.moveLeft();
-                this.movePostHandler();
-                break;
+                // LEFT
+                case 37:
+                    this.moveLeft();
+                    this.movePostHandler();
+                    break;
 
-            // RIGHT
-            case 39:
-                this.moveRight();
-                this.movePostHandler();
-                break;
+                // RIGHT
+                case 39:
+                    this.moveRight();
+                    this.movePostHandler();
+                    break;
+            }
+
         }
     }
 
@@ -77,17 +86,28 @@ public class PacMan extends AbstractPlayer {
     /**
      * Remove expired timers from PacMan
      */
-    public void checkItemTimers() {
+    public void checkItemTimers(PGraphics g) {
+        Timer shieldTimer = this.timers.get(ItemTypes.Shield);
+        Timer multiplicatorTimer = this.timers.get(ItemTypes.Multiplicator);
+
         // Shield timer
-        if (this.timers.get(ItemTypes.Shield) != null && this.timers.get(ItemTypes.Shield).tickAndVerify()) {
-            this.hasShield = false;
-            this.timers.remove(ItemTypes.Shield);
+        if (shieldTimer != null) {
+            shieldTimer.draw(g, 250, 30);
+
+            if (shieldTimer.tickAndVerify()) {
+                this.hasShield = false;
+                this.timers.remove(ItemTypes.Shield);
+            }
         }
 
         // PointMultiplicator timer
-        if (this.timers.get(ItemTypes.Multiplicator) != null && this.timers.get(ItemTypes.Multiplicator).tickAndVerify()) {
-            this.pointMultiplicator = 1;
-            this.timers.remove(ItemTypes.Multiplicator);
+        if (multiplicatorTimer != null) {
+            multiplicatorTimer.draw(g, 320, 30);
+
+            if (multiplicatorTimer.tickAndVerify()) {
+                this.pointMultiplicator = 1;
+                this.timers.remove(ItemTypes.Multiplicator);
+            }
         }
     }
 
@@ -99,6 +119,7 @@ public class PacMan extends AbstractPlayer {
         if (this.getCurrentBlock().getItem() != null) {
             switch (this.getCurrentBlock().getItem().getType()) {
                 case Point:
+                    this.appleCounter++;
                     this.pointCounter += this.pointMultiplicator;
                     break;
                 case Multiplicator:
@@ -115,7 +136,7 @@ public class PacMan extends AbstractPlayer {
 
         // Beam
         if (this.getCurrentBlock().getType() == BlockTypes.Beam) {
-            this.moveToBlock(Map.getRandomBlock());
+            this.moveToBlock(Map.getRandomBlockExcludingBlock(this.getCurrentBlock()));
         }
     }
 

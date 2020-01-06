@@ -20,10 +20,18 @@ public class Game extends PApplet {
 
     private Menu menu;
     private Map map;
-    private PacMan pacMan;
-    private Blinky blinky;
 
     private GameStates state;
+    private Timer countdown;
+
+    // Player
+    private PacMan pacMan;
+
+    // Ghosts
+    private Blinky blinky;
+    private Clyde clyde;
+    private Inky inky;
+    private Pinky pinky;
 
     void run() {
         Game.runSketch(new String[]{""}, this);
@@ -79,6 +87,9 @@ public class Game extends PApplet {
     private void initGame() {
         this.state = GameStates.Play;
 
+        // Set countdown
+        this.countdown = new Timer(90);
+
         // Generate map
         this.map = new Map(this.loadRandomMap());
 
@@ -95,15 +106,15 @@ public class Game extends PApplet {
      */
     private void drawGame() {
         Game.frameCount++;
+        this.countdown.tick();
 
-        this.drawPointStats();
+        this.drawStats();
         this.checkForFinish();
 
         Map.generateRandomItems(Game.frameCount);
         this.map.draw(this.g);
 
-        this.pacMan.checkItemTimers();
-
+        this.pacMan.checkItemTimers(this.g);
 
         if (this.keyPressed) {
             this.pacMan.move(this.keyCode);
@@ -118,22 +129,31 @@ public class Game extends PApplet {
     /**
      * Draw Game PointStats
      */
-    private void drawPointStats() {
+    private void drawStats() {
         this.fill(Utility.colorWhite);
         this.textSize(14);
-        this.text("Points: " + this.pacMan.getPointCounter() + " / " + Map.pointsToCollect, 20, 30);
+
+        // Points
+        this.text("Apples: " + this.pacMan.getAppleCounter() + " / " + Map.applesToCollect, 20, 30);
+        this.text("Points: " + this.pacMan.getPointCounter(), 20, 50);
+
+        // Countdown
+        this.countdown.draw(this.g, 140, 30);
     }
 
     /*
      * Finishing scenarios:
      *  - Get caught
      *  - Collected all points
+     *  - Countdown expired
      */
     private void checkForFinish() {
         if (!this.pacMan.getHasShield() && this.blinky.hasCaught(this.pacMan.getCurrentBlock())) {
             this.state = GameStates.GameOver;
-        } else if (this.pacMan.getPointCounter() == Map.pointsToCollect) {
+        } else if (this.pacMan.getAppleCounter() == Map.applesToCollect) {
             this.state = GameStates.GameWon;
+        } else if (this.countdown.isExpired()) {
+            this.state = GameStates.GameOver;
         }
     }
 

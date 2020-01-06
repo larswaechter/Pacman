@@ -3,10 +3,12 @@ package com.larswaechter.map;
 import java.awt.*;
 import java.util.Objects;
 
-import com.larswaechter.items.*;
+import com.larswaechter.DrawInterface;
 import processing.core.PGraphics;
 
-public class AbstractBlock {
+import com.larswaechter.items.*;
+
+public abstract class AbstractBlock implements DrawInterface {
     static final int width = 40;
     static final int height = 40;
 
@@ -21,6 +23,8 @@ public class AbstractBlock {
 
     private int color;
 
+    private Point center;
+
     private AbstractItem item;
 
     AbstractBlock(BlockTypes type, float x, float y, int mapIdxX, int mapIdxY) {
@@ -29,6 +33,10 @@ public class AbstractBlock {
         this.y = y;
         this.mapIdxX = mapIdxX;
         this.mapIdxY = mapIdxY;
+
+        int xCenter = (int) (this.x + (Block.width / 2));
+        int yCenter = (int) (this.y + (Block.height / 2));
+        this.center = new Point(xCenter, yCenter);
     }
 
     /**
@@ -38,7 +46,7 @@ public class AbstractBlock {
      * @param b Block b
      * @return Distance between two blocks
      */
-    public static int getBlockDistance(AbstractBlock a, AbstractBlock b) {
+    public static int manhattanDistance(AbstractBlock a, AbstractBlock b) {
         return Math.abs(a.mapIdxX - b.mapIdxX) + Math.abs(a.mapIdxY - b.mapIdxY);
     }
 
@@ -58,7 +66,7 @@ public class AbstractBlock {
                 this.setItem(new ShieldItem((float) center.getX(), (float) center.getY()));
                 break;
             case Multiplicator:
-                this.setItem(new MultiplicatorItem((float) center.getX(), (float) center.getY(), 2));
+                this.setItem(new MultiplicatorItem((float) center.getX(), (float) center.getY(), 3));
                 break;
         }
     }
@@ -81,10 +89,21 @@ public class AbstractBlock {
      * @return Center Point
      */
     public Point getCenter() {
-        int xCenter = (int) (this.x + (Block.width / 2));
-        int yCenter = (int) (this.y + (Block.height / 2));
+        return this.center;
+    }
 
-        return new Point(xCenter, yCenter);
+    /**
+     * Draw map
+     *
+     * @param g Processing graphic
+     */
+    @Override
+    public void draw(PGraphics g) {
+        g.fill(this.color);
+        g.rect(this.x, this.y, Block.width, Block.height);
+        if (this.item != null) {
+            this.item.draw(g);
+        }
     }
 
     @Override
@@ -118,19 +137,4 @@ public class AbstractBlock {
     void setItem(AbstractItem item) {
         this.item = item;
     }
-
-    /**
-     * Draw map
-     *
-     * @param g Processing graphic
-     */
-    void draw(PGraphics g) {
-        g.fill(this.color);
-        g.rect(this.x, this.y, Block.width, Block.height);
-        if (this.item != null) {
-            this.item.draw(g);
-        }
-    }
-
-
 }

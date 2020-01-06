@@ -1,5 +1,5 @@
 package com.larswaechter.map;
 
 public enum BlockTypes {
-    Block, Beam, Trap
+    Block, Beam
 }

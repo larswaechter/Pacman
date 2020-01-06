@@ -3,18 +3,18 @@ package com.larswaechter.players;
 import com.larswaechter.Utility;
 
 /**
- * Pink ghost
+ * Cyan Ghost
  */
 
-public class Pinky extends AbstractGhost {
-    public Pinky() {
+public class Inky extends AbstractGhost {
+    public Inky() {
         super();
-        this.setColor(Utility.colorGhostPink);
+        this.setColor(Utility.colorGhostCyan);
         this.setSpeed(2);
     }
 
     /**
-     * Pinky positions itself in front of Pac-Man
+     * Inky moves randomly
      */
     public void move() {
     }

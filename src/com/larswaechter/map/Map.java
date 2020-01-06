@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import processing.core.PGraphics;
 import processing.data.JSONArray;
 
-import com.larswaechter.items.ItemTypes;
-import com.larswaechter.Utility;
+import com.larswaechter.DrawInterface;
 
-public class Map {
+import com.larswaechter.Game;
+import com.larswaechter.Utility;
+import com.larswaechter.items.ItemTypes;
+
+public class Map implements DrawInterface {
     // Array of all JSON maps
     public static String[] maps = {
             "res/maps/map1.json"
@@ -18,9 +21,10 @@ public class Map {
     public static AbstractBlock[][] blocks;
     private static ArrayList<AbstractBlock> blocksList = new ArrayList<AbstractBlock>();
 
-    public static int pointsToCollect = 0;
+    public static int applesToCollect = 0;
 
     public Map(JSONArray jsonMap) {
+        Map.applesToCollect = 0;
         this.generateBlocks(jsonMap);
     }
 
@@ -82,11 +86,11 @@ public class Map {
 
         // Take first one as default
         AbstractBlock bestBlockToMoveTo = possibleBlocksToMoveTo.get(0);
-        int bestBlockToMoveToDistance = Block.getBlockDistance(bestBlockToMoveTo, target);
+        int bestBlockToMoveToDistance = Block.manhattanDistance(bestBlockToMoveTo, target);
 
         // Find block with shortest distance to target block
         for (AbstractBlock block : possibleBlocksToMoveTo) {
-            int distance = Block.getBlockDistance(block, target);
+            int distance = Block.manhattanDistance(block, target);
             if (distance < bestBlockToMoveToDistance) {
                 bestBlockToMoveTo = block;
                 bestBlockToMoveToDistance = distance;
@@ -94,6 +98,23 @@ public class Map {
         }
 
         return bestBlockToMoveTo;
+    }
+
+    /**
+     * Get all possible blocks to move to from current position
+     *
+     * @param block Current position
+     * @return Possible blocks
+     */
+    public static ArrayList<AbstractBlock> getPossibleBlocksToMoveTo(AbstractBlock block) {
+        ArrayList<AbstractBlock> possibleMoves = new ArrayList<AbstractBlock>();
+
+        if (Map.canMoveUp(block)) possibleMoves.add(Map.getBlockTop(block));
+        if (Map.canMoveDown(block)) possibleMoves.add(Map.getBlockDown(block));
+        if (Map.canMoveLeft(block)) possibleMoves.add(Map.getBlockLeft(block));
+        if (Map.canMoveRight(block)) possibleMoves.add(Map.getBlockRight(block));
+
+        return possibleMoves;
     }
 
     /**
@@ -112,29 +133,40 @@ public class Map {
     }
 
     /**
-     * Get BeamBlocks
+     * Get random block with a distance of at least 10 blocks to given block
      *
-     * @return BeamBlocks
+     * @param block block to have a distance of at least 10 blocks from
+     * @return Block
      */
-    public static ArrayList<BeamBlock> getBeamBlocks() {
-        ArrayList<BeamBlock> beamBlocks = new ArrayList<BeamBlock>();
+    public static AbstractBlock getRandomBlockExcludingBlock(AbstractBlock block) {
+        AbstractBlock randomBlock;
 
-        for (AbstractBlock block : Map.blocksList) {
-            if (block != null && block.getType() == BlockTypes.Beam) {
-                beamBlocks.add((BeamBlock) block);
-            }
-        }
+        do {
+            randomBlock = Map.getRandomBlock();
+        } while (AbstractBlock.manhattanDistance(randomBlock, block) < 10);
 
-        return beamBlocks;
+        return randomBlock;
     }
 
     /**
-     * Generates randomly random items
+     * Generates randomly random items every 20s
+     * - Shield
+     * - Multiplicator
      *
      * @param frameCounter FrameCounter
      */
     public static void generateRandomItems(int frameCounter) {
+        if (frameCounter % (Game.framesPerSecond * 20) == 0) {
+            int random = Utility.getRandomNumber(1, 10);
 
+            AbstractBlock randomBlock = Map.getRandomBlock();
+
+            if (random % 2 == 0) {
+                randomBlock.generateItem(ItemTypes.Shield);
+            } else {
+                randomBlock.generateItem(ItemTypes.Multiplicator);
+            }
+        }
     }
 
     /**
@@ -150,23 +182,6 @@ public class Map {
             if (block != null)
                 block.draw(g);
         }
-    }
-
-    /**
-     * Get all possible blocks to move to from current position
-     *
-     * @param block Current position
-     * @return Possible blocks
-     */
-    private static ArrayList<AbstractBlock> getPossibleBlocksToMoveTo(AbstractBlock block) {
-        ArrayList<AbstractBlock> possibleMoves = new ArrayList<AbstractBlock>();
-
-        if (Map.canMoveUp(block)) possibleMoves.add(Map.getBlockTop(block));
-        if (Map.canMoveDown(block)) possibleMoves.add(Map.getBlockDown(block));
-        if (Map.canMoveLeft(block)) possibleMoves.add(Map.getBlockLeft(block));
-        if (Map.canMoveRight(block)) possibleMoves.add(Map.getBlockRight(block));
-
-        return possibleMoves;
     }
 
     /**
@@ -228,7 +243,7 @@ public class Map {
 
             // Loop Y coordinates
             for (int k = 0; k < col.size(); k++) {
-                int yPos = Block.width + ((k + 1) * Block.width);
+                int yPos = Block.height + ((k + 1) * Block.height);
 
                 switch (col.getInt(k)) {
                     // Point
@@ -237,7 +252,7 @@ public class Map {
                         pointBlock.generateItem(ItemTypes.Point);
                         Map.blocks[i][k] = pointBlock;
                         Map.blocksList.add(pointBlock);
-                        Map.pointsToCollect++;
+                        Map.applesToCollect++;
                         break;
 
                     // Beam

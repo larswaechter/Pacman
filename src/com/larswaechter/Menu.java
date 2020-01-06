@@ -2,7 +2,7 @@ package com.larswaechter;
 
 import processing.core.*;
 
-class Menu extends PApplet {
+class Menu implements DrawInterface {
     private PShape img;
 
     private int imgWidth = 150;
@@ -17,7 +17,8 @@ class Menu extends PApplet {
      *
      * @param g Processing graphic
      */
-    void draw(PGraphics g) {
+    @Override
+    public void draw(PGraphics g) {
         g.shape(this.img, (float) (Game.width - this.imgWidth) / 2, 150, this.imgWidth, this.imgHeight);
         g.textSize(16);
         g.text("Press space to start!", 230, 400);

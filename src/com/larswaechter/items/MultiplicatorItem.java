@@ -10,7 +10,7 @@ public class MultiplicatorItem extends AbstractItem {
 
     public MultiplicatorItem(float x, float y, int multiplicator) {
         super(ItemTypes.Multiplicator, x, y);
-        this.setColor(Utility.colorGreen);
+        this.setColor(Utility.colorOrange);
         this.multiplicator = multiplicator;
     }
 

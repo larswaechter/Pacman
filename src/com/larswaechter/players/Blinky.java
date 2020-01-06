@@ -17,21 +17,6 @@ public class Blinky extends AbstractGhost {
     }
 
     /**
-     * Spawn on a random block with a distance of at least 10 blocks
-     *
-     * @param pacManPosition Current PacMan position
-     */
-    public void spawn(AbstractBlock pacManPosition) {
-        AbstractBlock randomBlock;
-
-        do {
-            randomBlock = Map.getRandomBlock();
-        } while (Block.getBlockDistance(randomBlock, pacManPosition) < 10);
-
-        this.moveToBlock(randomBlock);
-    }
-
-    /**
      * Blinky tries to get closer to given block with each call
      *
      * @param block Block to hunt

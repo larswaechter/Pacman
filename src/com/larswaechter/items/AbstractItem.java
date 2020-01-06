@@ -2,7 +2,9 @@ package com.larswaechter.items;
 
 import processing.core.PGraphics;
 
-public abstract class AbstractItem {
+import com.larswaechter.DrawInterface;
+
+public abstract class AbstractItem implements DrawInterface {
     private float x;
     private float y;
 
@@ -21,6 +23,7 @@ public abstract class AbstractItem {
      *
      * @param g Processing graphic
      */
+    @Override
     public void draw(PGraphics g) {
         g.fill(this.color);
         g.ellipse(this.x, this.y, 10, 10);
