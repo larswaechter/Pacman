@@ -34,7 +34,8 @@ public class Game extends PApplet {
     private Pinky pinky;
 
     void run() {
-        Game.runSketch(new String[]{""}, this);
+        String[] appArgs = {"Grab Ball"};
+        PApplet.runSketch(appArgs, this);
     }
 
     @Override

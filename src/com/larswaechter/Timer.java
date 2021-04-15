@@ -7,15 +7,15 @@ import processing.core.PGraphics;
  */
 
 public class Timer {
-    private int frameRateEnd;
-    private int frameRateCurrent;
+    private final int frameCountEnd;
+    private int frameCountCurrent;
 
     /**
      * @param ttl Time to live in seconds
      */
     public Timer(int ttl) {
-        this.frameRateCurrent = Game.frameCount;
-        this.frameRateEnd = this.frameRateCurrent + ((int) Math.pow(Game.framesPerSecond, 2) * ttl);
+        this.frameCountCurrent = Game.frameCount;
+        this.frameCountEnd = this.frameCountCurrent + Game.framesPerSecond * ttl;
     }
 
     /**
@@ -41,11 +41,11 @@ public class Timer {
     }
 
     public void tick() {
-        this.frameRateCurrent += Game.framesPerSecond;
+        this.frameCountCurrent++;
     }
 
     public boolean isExpired() {
-        return this.frameRateCurrent >= this.frameRateEnd;
+        return this.frameCountCurrent >= this.frameCountEnd;
     }
 
     public void draw(PGraphics g, int x, int y) {
@@ -60,6 +60,6 @@ public class Timer {
      * @return Seconds left
      */
     private int getSecondsLeft() {
-        return (int) Math.floor((this.frameRateEnd - this.frameRateCurrent) / Math.pow(Game.framesPerSecond, 2));
+        return  (this.frameCountEnd - this.frameCountCurrent) / Game.framesPerSecond;
     }
 }
